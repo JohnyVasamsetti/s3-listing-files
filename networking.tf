@@ -17,9 +17,9 @@ resource "aws_internet_gateway" "main_igw" {
 }
 
 # Subnet
-resource "aws_subnet" "public_subnet_1" {
+resource "aws_subnet" "public_subnet" {
   vpc_id                  = aws_vpc.main_vpc.id
-  cidr_block              = local.public_subnet_cidr_block_1
+  cidr_block              = local.public_subnet_cidr_block
   availability_zone       = local.availability_zone_1
   map_public_ip_on_launch = true
   tags = {
@@ -42,7 +42,41 @@ resource "aws_route_table" "public_route_table" {
 }
 
 # Attaching route tables with subnet
-resource "aws_route_table_association" "public_rt_1_association" {
+resource "aws_route_table_association" "public_rt_association" {
   route_table_id = aws_route_table.public_route_table.id
-  subnet_id      = aws_subnet.public_subnet_1.id
+  subnet_id      = aws_subnet.public_subnet.id
+}
+
+# Security group
+resource "aws_security_group" "public_instance_sg" {
+  name   = "public_instance_sg"
+  vpc_id = aws_vpc.main_vpc.id
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = -1
+    to_port     = -1
+    protocol    = "icmp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    task = "instances"
+    Name = "public_instance_sg"
+  }
 }
