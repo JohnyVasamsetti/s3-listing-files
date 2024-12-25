@@ -1,4 +1,4 @@
-resource "aws_s3_bucket" "content-storage-for-listing-assignment" {
+resource "aws_s3_bucket" "content_storage_for_listing_assignment" {
   bucket = "content-storage-for-listing-assignment"
 
   tags = {
