@@ -8,11 +8,19 @@ resource "aws_s3_bucket" "content_storage_for_listing_assignment" {
 
 # Creating Ec2 instances
 resource "aws_instance" "public_instance" {
-  ami             = local.ami_id
-  instance_type   = local.instance_type
-  subnet_id       = aws_subnet.public_subnet.id
-  security_groups = [aws_security_group.public_instance_sg.id]
-  key_name        = aws_key_pair.instance_key.key_name
+  ami                  = local.ami_id
+  instance_type        = local.instance_type
+  subnet_id            = aws_subnet.public_subnet.id
+  security_groups      = [aws_security_group.public_instance_sg.id]
+  key_name             = aws_key_pair.instance_key.key_name
+  user_data            = <<-EOF
+    #!/bin/bash
+    sudo amazon-linux-extras install python3.8 -y
+    pip3 install flask boto3
+    echo "${file("app.py")}" > /home/ec2-user/app.py
+    python3 /home/ec2-user/app.py
+  EOF
+  iam_instance_profile = aws_iam_instance_profile.ec2_instance_profile.name
   tags = {
     task = "s3-bucket-listing"
     Name = "public_instance"
