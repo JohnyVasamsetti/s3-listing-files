@@ -80,3 +80,13 @@ resource "aws_security_group" "public_instance_sg" {
     Name = "public_instance_sg"
   }
 }
+
+
+resource "aws_eip" "this" {
+  vpc = true
+}
+
+resource "aws_eip_association" "example" {
+  instance_id   = aws_instance.public_instance.id
+  allocation_id = aws_eip.this.id
+}
