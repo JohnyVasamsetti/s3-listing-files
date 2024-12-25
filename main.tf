@@ -1,3 +1,11 @@
+resource "aws_s3_bucket" "content-storage-for-listing-assignment" {
+  bucket = "content-storage-for-listing-assignment"
+
+  tags = {
+    task = "s3-listing-assignment"
+  }
+}
+
 # Creating Ec2 instances
 resource "aws_instance" "public_instance" {
   ami             = local.ami_id
