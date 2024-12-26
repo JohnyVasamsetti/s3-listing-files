@@ -17,7 +17,7 @@ This project implements an HTTP service that exposes an endpoint to list the con
 1. **Request**: `http://<IP>:5000/list-bucket-contents`
    **Response**: `{ "content": ["dir1", "dir2"] }`
 2. **Request**: `http://<IP>:5000/list-bucket-contents/dir1`
-   **Response**: `{ "content": [] }`
+   **Response**: `{ "content": [file1] }`
 3. **Request**: `http://<IP>:5000/list-bucket-contents/dir2`
    **Response**: `{ "content": ["file1", "file2"] }`
 
