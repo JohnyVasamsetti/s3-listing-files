@@ -106,3 +106,47 @@ To delete all resources created by Terraform:
 ```bash
 terraform destroy
 ```
+
+<br><br>
+
+# Login to instance for troubleshooting
+
+#### Steps
+
+1. **Modify Security Group**:
+   Uncomment the following lines in the networking.tf file:
+
+   ```hcl
+   ingress {
+      from_port   = 22
+      to_port     = 22
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+   }
+   ```
+
+2. **Apply Terraform Changes**:
+
+   ```bash
+   terraform init
+   terraform plan
+   terraform apply
+   ```
+
+3. **Retrieve the Private Key**:
+   Use AWS CLI to retrieve the private key from Secrets Manager and save it as a .pem file:
+
+   ```bash
+   aws secretsmanager get-secret-value --secret-id <your-secret-id> --query 'SecretString' --output text > private-key.pem
+   ```
+
+4. **Set Permissions on the Key**
+
+   ```bash
+   chmod 400 private-key.pem
+   ```
+
+5. **Connect to the EC2 Instance**
+   ```bash
+   ssh -i private-key.pem ec2-user@<public-ip>
+   ```
