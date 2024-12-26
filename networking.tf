@@ -52,17 +52,18 @@ resource "aws_security_group" "public_instance_sg" {
   name   = "public_instance_sg"
   vpc_id = aws_vpc.main_vpc.id
   ingress {
-    from_port   = 80
-    to_port     = 80
+    from_port   = local.port
+    to_port     = local.port
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  # un-commenting the below lines to open ssh port and get the private key from secret manager to get into the ec2 machine for any troubleshooting.
+  # ingress {
+  #   from_port   = 22
+  #   to_port     = 22
+  #   protocol    = "tcp"
+  #   cidr_blocks = ["0.0.0.0/0"]
+  # }
   ingress {
     from_port   = -1
     to_port     = -1
