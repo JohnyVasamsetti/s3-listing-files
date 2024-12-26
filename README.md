@@ -45,7 +45,7 @@ This project implements an HTTP service that exposes an endpoint to list the con
 - Provisions the networking components required.
 - Provisions an EC2 instance with a static Elastic IP.
 - Configures an IAM role with permissions to access the S3 bucket.
-- Create an empty S3 bucket ( create folders and upload files to s3 bucket )
+- Create an empty S3 bucket
 - Sets up security groups to allow HTTP traffic on port 5000.
 - Deploys the Python service as part of the EC2 instance's user data.
 
@@ -86,7 +86,14 @@ This project implements an HTTP service that exposes an endpoint to list the con
 5. **Retrieve the Public IP**:
    After the apply step, note the public IP of the EC2 instance from the output.
 
-6. **Access the Service**:
+6. **Upload files to S3 bucket**:
+   After you provision everything, create folder with temporary files and upload the files to s3 bucket using aws-cli from local machine.
+
+   ```bash
+   aws s3 cp files-to-upload s3://content-storage-for-listing-assignment --recursive
+   ```
+
+7. **Access the Service**:
    Use the public IP to access the endpoint:
    ```bash
    curl http://<public-ip>:5000/list-bucket-contents
