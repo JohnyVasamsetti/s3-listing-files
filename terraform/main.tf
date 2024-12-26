@@ -17,7 +17,7 @@ resource "aws_instance" "public_instance" {
     #!/bin/bash
     sudo amazon-linux-extras install python3.8 -y
     pip3 install flask boto3
-    echo "${file("app.py")}" > /home/ec2-user/app.py
+    echo "${file("../application/app.py")}" > /home/ec2-user/app.py
     python3 /home/ec2-user/app.py
   EOF
   iam_instance_profile = aws_iam_instance_profile.ec2_instance_profile.name
